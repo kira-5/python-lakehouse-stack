@@ -5,7 +5,9 @@ Welcome to your learning journey for the **Python Lakehouse Stack**. Use this in
 ## 🎓 Curriculum Guides
 
 - [Level 0: The Playground](duckdb_persistence.md) - Memory vs. Disk connections.
-- [Level 1: The Input](level_1_ingestion.md) - CSV & JSON Ingestion strategy.
+- [Level 1: The Input](level_1_ingestion.md) - CSV, JSON, and Remote Ingestion.
+- [Level 2: The Logic](level_2_outputs.md) - Pandas, Polars, and Zero-Copy.
+- [Level 3: The Architecture](level_3_architecture.md) - Lakehouse Formats (Iceberg/Delta).
 
 ## 🦆 DuckDB Mastery
 
