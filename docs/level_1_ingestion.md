@@ -55,13 +55,13 @@ Every script we wrote in Level 1 (CSV, JSON, Excel, etc.) uses the `COPY (...) T
 
 ### 1. `ingest_csv.py` (Structured Input)
 
-* **The Problem**: CSVs are slow to read and have no metadata.
-* **The Solution**: Use DuckDB to read the CSV, apply a **Strict Schema**, and save it as a Parquet "Gold" file.
+*   **The Problem**: CSVs are slow to read and have no metadata.
+*   **The Solution**: Use DuckDB to read the CSV, apply a **Strict Schema**, and save it as a Parquet "Gold" file.
 
 ### 2. `ingest_json.py` (Semi-Structured Input)
 
-* **The Problem**: JSON is often "nested" (objects inside objects), which traditional SQL engines struggle to handle.
-* **The Solution**: DuckDB automatically "flattens" these nested structures into a flat table format during ingestion.
+*   **The Problem**: JSON is often "nested" (objects inside objects), which traditional SQL engines struggle to handle.
+*   **The Solution**: DuckDB automatically "flattens" these nested structures into a flat table format during ingestion.
 
 ---
 
@@ -84,9 +84,9 @@ Level 1 isn't just for one file type. DuckDB allows us to ingest data from a wid
 
 In a Lakehouse stack, we **never** just copy a CSV. We always follow this 3-step mantra:
 
-1. **Inspect**: Look at the raw file to see what it *looks* like.
-2. **Define**: Explicitly tell the computer what the types *should* be (Integer, Date, Boolean).
-3. **Convert**: Transform the data into Parquet to bake in those types forever.
+1.  **Inspect**: Look at the raw file to see what it *looks* like.
+2.  **Define**: Explicitly tell the computer what the types *should* be (Integer, Date, Boolean).
+3.  **Convert**: Transform the data into Parquet to bake in those types forever.
 
 ---
 
@@ -94,10 +94,10 @@ In a Lakehouse stack, we **never** just copy a CSV. We always follow this 3-step
 
 By the end of Level 1, your `data/warehouse/` will contain files that are:
 
-* **Fast**: Columnar storage means we only read the data we need.
-* **Typed**: The data types are stored *inside* the file.
-* **Compressed**: Typically 5x to 10x smaller than CSV.
-* **Attributed**: Filenames include the source (e.g., `_from_json`) for lineage tracking.
+*   **Fast**: Columnar storage means we only read the data we need.
+*   **Typed**: The data types are stored *inside* the file.
+*   **Compressed**: Typically 5x to 10x smaller than CSV.
+*   **Attributed**: Filenames include the source (e.g., `_from_json`) for lineage tracking.
 
 ---
 
@@ -109,8 +109,8 @@ In a traditional **Data Warehouse**, your data is trapped inside a proprietary d
 
 In a **Data Lakehouse**:
 
-* The **"Lake"** part means your data lives as open files (Parquet) on a standard filesystem (S3, Azure Blob, or your local `data/` folder).
-* The **"House"** part means we add structure (Schema) and ACID transactions (using Delta/Iceberg later) to those files.
+*   The **"Lake"** part means your data lives as open files (Parquet) on a standard filesystem (S3, Azure Blob, or your local `data/` folder).
+*   The **"House"** part means we add structure (Schema) and ACID transactions (using Delta/Iceberg later) to those files.
 
 We use the folder name `warehouse/` as a "Curriculum Label" to show where the "Clean" data lives, but technically, it's all part of the Lake.
 
@@ -128,13 +128,13 @@ In Level 0, we used `pq.write_table(arrow_table)` (**The Bridge**). In Level 1, 
 
 **1. Level 0: `pq.write_table(arrow_table)` (The Bridge)**
 
-* **How it works**: Uses **Python** as the middleman. DuckDB hands a "bucket" of data (Arrow) to Python, and Python saves it.
-* **Why do it?**: Use this when your Python code needs to "touch" or "inspect" the data before it gets saved.
+*   **How it works**: Uses **Python** as the middleman. DuckDB hands a "bucket" of data (Arrow) to Python, and Python saves it.
+*   **Why do it?**: Use this when your Python code needs to "touch" or "inspect" the data before it gets saved.
 
 **2. Level 1: `COPY ... TO` (The Shortcut)**
 
-* **How it works**: The **DuckDB Engine** handles it natively (C++). Python just sends the command.
-* **Why do it?**: **Pure Speed**. Because data never enters Python, it is incredibly fast for bulk ingestion.
+*   **How it works**: The **DuckDB Engine** handles it natively (C++). Python just sends the command.
+*   **Why do it?**: **Pure Speed**. Because data never enters Python, it is incredibly fast for bulk ingestion.
 
 ### Q4: What are all the input sources we can ingest in Level 1?
 
@@ -153,30 +153,27 @@ DuckDB is the "Swiss Army Knife" of ingestion. It allows your Lakehouse to absor
 
 When you see `import duckdb`, you have two ways to talk to the engine:
 
-1. **`duckdb.sql("...")` (Module-Level)**: This uses a **Global In-Memory Connection**. It is the "Auto-Pilot" mode. 
-   - **Can it talk to Postgres?** Yes! Just run `ATTACH '...' (TYPE POSTGRES);` on this global connection.
-   - **Best For**: Stateless ingestion pipes (Level 1) where you just move data from A to B.
+1.  **`duckdb.sql("...")` (Module-Level)**: This uses a **Global In-Memory Connection**. It is the "Auto-Pilot" mode.
+    *   **Can it talk to Postgres?** Yes! Just run `ATTACH '...' (TYPE POSTGRES);` on this global connection.
+    *   **Best For**: Stateless ingestion pipes (Level 1) where you just move data from A to B.
 
-2. **`duckdb.connect('file.db')` (Connection-Level)**: This is the "Manual Pilot" mode. Use this when:
-   - **Persistence is needed**: You want to save your work into a permanent `.duckdb` warehouse file.
-   - **Isolation is needed**: You are building a complex app and want private "sandboxes" for different threads.
+2.  **`duckdb.connect('file.db')` (Connection-Level)**: This is the "Manual Pilot" mode. Use this when:
+    *   **Persistence is needed**: You want to save your work into a permanent `.duckdb` warehouse file.
+    *   **Isolation is needed**: You are building a complex app and want private "sandboxes" for different threads.
 
-In this curriculum, we use `duckdb.sql()` for Level 1 because our only goal is to "bully" data into Parquet files. In Level 2 and 3, we may use `duckdb.connect('warehouse.db')` to maintain a persistent state.
+### 🚪 The "Room & Door" Analogy
 
 Think of it like this:
 
-duckdb.sql(): You are standing in a room (the global memory) and calling out commands. You can shout "Connect to Postgres!" (ATTACH) and it will happen in that room.
-duckdb.connect(): You are opening a specific door to a specific room.
-If that door is a file (duckdb.connect('warehouse.db')), your room is Permanent.
-If that door is just memory (duckdb.connect()), your room is Private and isolated from everyone else
-
+*   **`duckdb.sql()`**: You are standing in a room (the global memory) and calling out commands. You can shout *"Connect to Postgres!"* (`ATTACH`) and it will happen in that room.
+*   **`duckdb.connect()`**: You are opening a **specific door** to a specific room.
+    *   If that door is a file (`duckdb.connect('warehouse.db')`), your room is **Permanent**.
+    *   If that door is just memory (`duckdb.connect()`), your room is **Private** and isolated from everyone else.
 
 ### 🍱 The Rule of Thumb
 
-* **Level 1 (Ingestion)**: We use `duckdb.sql()` because we are just passing through. We grab data from CSV/JSON/Postgres/HTTP and quickly "dump" it into Parquet files. We don't need a permanent database "room" because the Parquet files *are* our storage.
-* **Level 2/3 (Logic & Apps)**: We will start using `duckdb.connect('main.db')` when we want to build a real analytical application that needs to remember state across multiple Python sessions.
-
----
+*   **Level 1 (Ingestion)**: We use `duckdb.sql()` because we are just passing through. We grab data from CSV/JSON/Postgres/HTTP and quickly "dump" it into Parquet files. We don't need a permanent database "room" because the Parquet files *are* our storage.
+*   **Level 2/3 (Logic & Apps)**: We will start using `duckdb.connect('main.db')` when we want to build a real analytical application that needs to remember state across multiple Python sessions.
 
 ---
 
@@ -184,10 +181,10 @@ If that door is just memory (duckdb.connect()), your room is Private and isolate
 
 It’s tempting to just `SELECT *` and let DuckDB guess. Here is why we **Inspect → Define → Convert**:
 
-1. **Schema Drift**: If CSV column 10 is empty for 10,000 rows, DuckDB might guess `FLOAT`. If row 10,001 contains "Unknown", the ingestion crashes. By defining `VARCHAR`, we prevent the crash.
-2. **Standardization**: Your source might have `join_date` as a string. Your warehouse *needs* it to be a `TIMESTAMP`. Casting during ingestion means Level 2 logic can trust the types.
-3. **Storage Efficiency**: A column guessed as `VARCHAR` takes more space than a `DATE` or `INTEGER`. Parquet uses specific encodings based on the type you choose.
-4. **Downstream Safety**: If you use `SELECT *`, you are at the mercy of the source. If the source adds a "debug_log" column, it enters your warehouse. Manual selection acts as a **Data Gatekeeper**.
+1.  **Schema Drift**: If CSV column 10 is empty for 10,000 rows, DuckDB might guess `FLOAT`. If row 10,001 contains "Unknown", the ingestion crashes. By defining `VARCHAR`, we prevent the crash.
+2.  **Standardization**: Your source might have `join_date` as a string. Your warehouse *needs* it to be a `TIMESTAMP`. Casting during ingestion means Level 2 logic can trust the types.
+3.  **Storage Efficiency**: A column guessed as `VARCHAR` takes more space than a `DATE` or `INTEGER`. Parquet uses specific encodings based on the type you choose.
+4.  **Downstream Safety**: If you use `SELECT *`, you are at the mercy of the source. If the source adds a "debug_log" column, it enters your warehouse. Manual selection acts as a **Data Gatekeeper**.
 
 > [!IMPORTANT]
 > **Postgres Exception**: For SQL databases, the schema is already "locked" in the source. We trust the Postgres types, so we often *can* `SELECT *` safely there.
@@ -196,9 +193,9 @@ It’s tempting to just `SELECT *` and let DuckDB guess. Here is why we **Inspec
 
 **The Technical Deep-Dive:**
 
-* **CSV/TSV**: We *override* auto-detection with explicit types for production safety.
-* **JSON**: We use dot notation (e.g., `profile.email`) to flatten objects into columns immediately.
-* **Excel**: DuckDB can read Excel sheets directly, often 10x faster than traditional Python readers.
-* **GCS/Cloud**: This uses "Range Requests," pulling only the specific bytes needed for a query. Use `gs://` paths with service account credentials.
-* **HTTP/URL**: Pull public datasets directly into your warehouse without a middleman script.
-* **Databases**: "Mirror" a production database for analysis without putting load on the live app.
+*   **CSV/TSV**: We *override* auto-detection with explicit types for production safety.
+*   **JSON**: We use dot notation (e.g., `profile.email`) to flatten objects into columns immediately.
+*   **Excel**: DuckDB can read Excel sheets directly, often 10x faster than traditional Python readers.
+*   **GCS/Cloud**: This uses "Range Requests," pulling only the specific bytes needed for a query. Use `gs://` paths with service account credentials.
+*   **HTTP/URL**: Pull public datasets directly into your warehouse without a middleman script.
+*   **Databases**: "Mirror" a production database for analysis without putting load on the live app.
