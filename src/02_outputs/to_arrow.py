@@ -1,14 +1,22 @@
 import duckdb
 
 # LEVEL 2: The Logic
-# Concept: DuckDB -> Apache Arrow (In-Memory Columnar format)
-# This is the "Universal Language" of this stack
+# Concept: DuckDB -> Apache Arrow (The Universal Language)
+# Scenario: Converting the entire Warehouse into a memory-shared state
 
-con = duckdb.connect('data/warehouse/lakehouse.duckdb')
+print("🚀 Level 2: Interoperability with Apache Arrow")
 
-print("Fetching Arrow Table...")
-arrow_table = con.sql("SELECT * FROM 'data/warehouse/users.parquet'").arrow()
+# Fetch both tables into Arrow format
+print("Converting users.parquet to Arrow...")
+users_arrow = duckdb.sql("SELECT * FROM 'data/warehouse/users.parquet'").arrow()
 
-print(f"Type: {type(arrow_table)}")
-print(f"Columns: {arrow_table.column_names}")
-print(f"Row count: {len(arrow_table)}")
+print("Converting orders.parquet to Arrow...")
+orders_arrow = duckdb.sql("SELECT * FROM 'data/warehouse/orders.parquet'").arrow()
+
+print(f"\n✅ Users Columns: {users_arrow.column_names}")
+print(f"✅ Orders Columns: {orders_arrow.column_names}")
+
+print(f"\nTotal users in memory (Arrow): {len(users_arrow)}")
+print(f"Total orders in memory (Arrow): {len(orders_arrow)}")
+
+# These objects can now be passed to Spark, Pandas, or even C++ apps without copying.

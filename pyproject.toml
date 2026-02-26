@@ -14,4 +14,5 @@ dependencies = [
     "pyiceberg[pyarrow,pandas,s3fs]",
     "adbc-driver-postgresql",         # The specific Postgres driver
     "adbc-driver-manager",            # The manager to coordinate drivers
+    "openpyxl",                       # Required for reading .xlsx files
 ]

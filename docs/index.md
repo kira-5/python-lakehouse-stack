@@ -2,6 +2,11 @@
 
 Welcome to your learning journey for the **Python Lakehouse Stack**. Use this index to navigate the technical guides for DuckDB and the Lakehouse architecture.
 
+## 🎓 Curriculum Guides
+
+- [Level 0: The Playground](duckdb_persistence.md) - Memory vs. Disk connections.
+- [Level 1: The Input](level_1_ingestion.md) - CSV & JSON Ingestion strategy.
+
 ## 🦆 DuckDB Mastery
 
 - [Technical Overview](duckdb_overview.md) - What is DuckDB and why use it?
@@ -10,6 +15,7 @@ Welcome to your learning journey for the **Python Lakehouse Stack**. Use this in
 - [File Formats Guide](duckdb_file_formats.md) - CSV, JSON, and Parquet deep-dive.
 
 ## 🚀 Advanced Concepts
+
 - [Zero-Copy Data Transfer](duckdb_zero_copy.md) - How Arrow makes Python lightning fast.
 
 ## 🗺️ Roadmap Reference

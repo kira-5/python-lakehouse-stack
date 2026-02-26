@@ -1,22 +1,35 @@
 import duckdb
 import polars as pl
+import os
 
 # LEVEL 2: The Logic
 # Concept: Zero-Copy data transfer from DuckDB to Polars
-# Key Learn: Moving millions of rows in 0ms using Apache Arrow
+# Scenario: Identifying high-value customers by joining warehouse tables
 
-# 1. Connect to the warehouse
-con = duckdb.connect('data/warehouse/lakehouse.duckdb')
+# 1. Connect to our local warehouse files
+print("🚀 Level 2: Analytical Logic with Polars")
 
-# 2. Extract data to Polars (Zero-Copy)
-# The .pl() method uses Apache Arrow under the hood
-print("Transferring data from DuckDB to Polars...")
-df = con.sql("SELECT * FROM 'data/warehouse/users.parquet'").pl()
+# We can query Parquet files directly as if they were tables
+# In this example, we join Users and Orders from the warehouse
+query = """
+    SELECT 
+        u.name,
+        SUM(o.amount) as total_spent,
+        COUNT(o.order_id) as order_count
+    FROM 'data/warehouse/users.parquet' u
+    JOIN 'data/warehouse/orders.parquet' o ON u.user_id = o.user_id
+    GROUP BY ALL
+    ORDER BY total_spent DESC
+"""
 
-print("\n--- Polars DataFrame ---")
+# 2. Extract results to Polars (Zero-Copy)
+print("Transferring Joined Data from DuckDB room to Polars logic...")
+df = duckdb.sql(query).pl()
+
+print("\n--- Polars DataFrame (VIPs) ---")
 print(df)
 
-# 3. Perform Logic in Polars (Speed!)
-high_id_users = df.filter(pl.col("id") > 2)
-print("\n--- Filtered Result ---")
-print(high_id_users)
+# 3. Further Logic in Polars (Fast & Fluent)
+vips = df.filter(pl.col("total_spent") > 500)
+print("\n--- Filtered VIPs (Spent > $500) ---")
+print(vips)
