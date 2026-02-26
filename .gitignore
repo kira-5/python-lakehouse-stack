@@ -1,0 +1,32 @@
+# Data & Warehouse
+data/**
+*.parquet
+*.csv
+*.json
+*.duckdb
+*.db
+
+# Lakehouse Metadata
+_delta_log/
+metadata/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv
+venv/
+ENV/
+.env
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# .gitignore
+.venv/
+__pycache__/
+.env

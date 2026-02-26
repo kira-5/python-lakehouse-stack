@@ -1,0 +1,17 @@
+[project]
+name = "python-lakehouse-stack"
+version = "0.1.0"
+description = "A local lakehouse stack using DuckDB, Parquet, and Delta/Iceberg."
+readme = "README.md"
+requires-python = ">=3.14" # Safer for library compatibility
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "duckdb",
+    "pyarrow",
+    "polars",
+    "deltalake",
+    "pyiceberg[pyarrow,pandas,s3fs]",
+    "adbc-driver-postgresql",         # The specific Postgres driver
+    "adbc-driver-manager",            # The manager to coordinate drivers
+]
