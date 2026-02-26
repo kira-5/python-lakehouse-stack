@@ -2,15 +2,20 @@
 
 A curriculum-based guide to mastering data engineering with Python, DuckDB, Polars, and Lakehouse formats.
 
-## 🚀 The Roadmap
+### 📚 Quick Links
+
+- **[Documentation Index](docs/index.md)** - Key concepts, CLI guides, and technical deep-dives.
+- **[Curriculum Roadmap](docs/roadmap.md)** - Your learning path.
 
 ### Level 1: The Basics (File Formats)
 **Goal:** Master the "Input" layer.
+
 - **Concepts:** Reading messy CSVs, handling nested JSON, and converting to high-performance Parquet.
 - **Key Learn:** Why `read_parquet` is faster than `read_csv` (Columnar vs Row-based).
 
 ### Level 2: The Logic (Output Formats)
 **Goal:** Get data into the right shape for your code.
+
 - **Concepts:** Moving data from DuckDB into Polars, Pandas, and Arrow.
 - **Key Learn:** **Zero-Copy.** Moving millions of rows between DuckDB and Polars in 0ms using Arrow.
 
@@ -41,6 +46,7 @@ python-lakehouse-stack/
 ```
 
 ## 🛠️ Tech Stack
+
 - **Database:** DuckDB
 - **DataFrames:** Polars, Pandas
 - **Format:** Apache Arrow, Parquet
