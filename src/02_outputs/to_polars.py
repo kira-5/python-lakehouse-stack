@@ -16,8 +16,8 @@ query = """
         u.name,
         SUM(o.amount) as total_spent,
         COUNT(o.order_id) as order_count
-    FROM 'data/warehouse/users.parquet' u
-    JOIN 'data/warehouse/orders.parquet' o ON u.user_id = o.user_id
+    FROM 'data/warehouse/users_from_csv.parquet' u
+    JOIN 'data/warehouse/orders_from_csv.parquet' o ON u.user_id = o.user_id
     GROUP BY ALL
     ORDER BY total_spent DESC
 """

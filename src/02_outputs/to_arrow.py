@@ -7,11 +7,11 @@ import duckdb
 print("🚀 Level 2: Interoperability with Apache Arrow")
 
 # Fetch both tables into Arrow format
-print("Converting users.parquet to Arrow...")
-users_arrow = duckdb.sql("SELECT * FROM 'data/warehouse/users.parquet'").arrow()
+print("Converting users_from_csv.parquet to Arrow...")
+users_arrow = duckdb.sql("SELECT * FROM 'data/warehouse/users_from_csv.parquet'").arrow().read_all()
 
-print("Converting orders.parquet to Arrow...")
-orders_arrow = duckdb.sql("SELECT * FROM 'data/warehouse/orders.parquet'").arrow()
+print("Converting orders_from_csv.parquet to Arrow...")
+orders_arrow = duckdb.sql("SELECT * FROM 'data/warehouse/orders_from_csv.parquet'").arrow().read_all()
 
 print(f"\n✅ Users Columns: {users_arrow.column_names}")
 print(f"✅ Orders Columns: {orders_arrow.column_names}")

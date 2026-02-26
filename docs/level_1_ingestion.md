@@ -1,4 +1,4 @@
-# 🏛️ Level 1: The Input (Ingestion Strategy)
+# 🏛️ Level 1 (Storage): The Input (Ingestion Strategy)
 
 Level 1 is where we move from the "RAM Laboratory" to the **Data Warehouse**. It focuses on the "First Mile"—getting data from the outside world into our Lakehouse safely and efficiently.
 
