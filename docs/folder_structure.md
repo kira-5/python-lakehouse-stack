@@ -7,6 +7,7 @@ python-lakehouse-stack/
 │   ├── warehouse/         # Your .parquet and .duckdb files
 │   └── lakehouse/         # Your Delta/Iceberg table directories
 ├── notebooks/             # For SQL experimentation
+│   └── 00_playground.ipynb
 └── src/
     ├── 01_file_formats/   # LEARNING: CSV, JSON -> Parquet
     │   ├── ingest_csv.py
